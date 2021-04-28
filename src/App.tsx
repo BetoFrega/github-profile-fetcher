@@ -9,22 +9,24 @@ export default function App() {
     const [username, setUsername] = useState('fregadev')
     const {response: profile} = useFetch(`https://api.github.com/users/${username}`, [username])
     const {response: stars} = useFetch(`https://api.github.com/users/${username}/starred`, [username])
-    const [repos, setRepos] = useState<any>(null)
+    const [repos, setRepos] = useState<{ watchers: number; forks: number }[]>([])
 
     useEffect(() => {
         if (username) {
             (async () => {
-                const repos = await fetch(`https://api.github.com/users/${username}/repos`)
-                setRepos(await repos.json())
+                const repos = await (await fetch(`https://api.github.com/users/${username}/repos`)).json()
+                if (Array.isArray(repos)) {
+                    setRepos(repos)
+                }
             })()
         }
     }, [username])
 
     const watchers = useMemo(() => {
-        return repos && repos.reduce((total: 0, repo: { watchers: number }) => total + repo.watchers, 0)
+        return repos && repos.reduce((total: number, repo: { watchers: number }) => total + repo.watchers, 0)
     }, [repos])
     const forks = useMemo(() => {
-        return repos && repos.reduce((total: 0, repo: { forks: number }) => total + repo.forks, 0)
+        return repos && repos.reduce((total: number, repo: { forks: number }) => total + repo.forks, 0)
     }, [repos])
     let onChangeTextField = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         setUsername(e.target.value)
