@@ -1,6 +1,7 @@
 import './App.css';
 import useFetch from 'use-http'
 import {Avatar, Container, Grid, List, ListItem, TextField, Typography} from "@material-ui/core";
+import * as React from "react";
 import {useEffect, useMemo, useState} from "react";
 
 
@@ -25,7 +26,7 @@ export default function App() {
     const forks = useMemo(() => {
         return repos && repos.reduce((total: 0, repo: { forks: number }) => total + repo.forks, 0)
     }, [repos])
-    let onChangeTextField = (e) => {
+    let onChangeTextField = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         setUsername(e.target.value)
     };
     return (
