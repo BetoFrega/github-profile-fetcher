@@ -8,7 +8,6 @@ export default function App() {
     const [username, setUsername] = useState('fregadev')
     const {response: profile} = useFetch(`https://api.github.com/users/${username}`, [username])
     const {response: stars} = useFetch(`https://api.github.com/users/${username}/starred`, [username])
-
     const [repos, setRepos] = useState<any>(null)
 
     useEffect(() => {
@@ -26,15 +25,15 @@ export default function App() {
     const forks = useMemo(() => {
         return repos && repos.reduce((total: 0, repo: { forks: number }) => total + repo.forks, 0)
     }, [repos])
+    let onChangeTextField = (e) => {
+        setUsername(e.target.value)
+    };
     return (
         <Container>
             <Grid container spacing={2} direction="column">
                 <Grid item>
                     <Typography>github.com/</Typography>
-                    <TextField value={username} onChange={(e) => {
-                        setUsername(e.target.value)
-                    }
-                    }/>
+                    <TextField value={username} onChange={onChangeTextField}/>
                 </Grid>
                 <Grid item>
                     {
@@ -50,16 +49,11 @@ export default function App() {
                                     <ListItem>Watchers: {watchers}</ListItem>
                                     <ListItem>Forks: {forks}</ListItem>
                                 </List>
-
                             </Grid>
-
                         </Grid>
-
                     }
                 </Grid>
             </Grid>
-
-
         </Container>
     );
 }
