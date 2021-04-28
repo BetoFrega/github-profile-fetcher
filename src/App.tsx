@@ -54,8 +54,8 @@ export default function App() {
                                         <Avatar src={profile.data.avatar_url}/>
                                     </Grid>
                                     <Grid item>
-                                        <List><
-                                            ListItem>Followers: {profile.data.followers}</ListItem>
+                                        <List>
+                                            <ListItem>Followers: {profile.data.followers}</ListItem>
                                             <ListItem>Public Repositories: {profile.data.public_repos}</ListItem>
                                             <ListItem>Stars: {stars.data.length}</ListItem>
                                             <ListItem>Watchers: {watchers}</ListItem>
@@ -65,7 +65,8 @@ export default function App() {
                                 </Grid>
                             }
                         </Grid>
-                    </Grid></Box>
+                    </Grid>
+                </Box>
             </Paper>
         </Box>
     );
