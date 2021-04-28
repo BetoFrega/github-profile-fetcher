@@ -7,16 +7,23 @@ import {useEffect, useMemo, useState} from "react";
 
 export default function App() {
     const [username, setUsername] = useState('fregadev')
-    const {response: profile} = useFetch(`https://api.github.com/users/${username}`, [username])
-    const {response: stars} = useFetch(`https://api.github.com/users/${username}/starred`, [username])
+    const {response: profile, error: profileError} = useFetch(`https://api.github.com/users/${username}`, [username])
+    const {
+        response: stars,
+        error: starsError
+    } = useFetch(`https://api.github.com/users/${username}/starred`, [username])
     const [repos, setRepos] = useState<{ watchers: number; forks: number }[]>([])
 
     useEffect(() => {
         if (username) {
             (async () => {
-                const repos = await (await fetch(`https://api.github.com/users/${username}/repos`)).json()
+                const repos = await (await fetch(`https://api.github.com/users/${username}/repos`)).json().catch(() => {
+                    console.log(`User ${username} not found.`)
+                })
                 if (Array.isArray(repos)) {
                     setRepos(repos)
+                } else {
+                    setRepos([])
                 }
             })()
         }
@@ -40,7 +47,7 @@ export default function App() {
                 </Grid>
                 <Grid item>
                     {
-                        profile.data && stars.data && <Grid container>
+                        !starsError && !profileError && profile.data && stars.data && <Grid container>
                             <Grid item>
                                 <Avatar src={profile.data.avatar_url}/>
                             </Grid>
