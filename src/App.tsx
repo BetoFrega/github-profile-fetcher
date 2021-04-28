@@ -2,7 +2,7 @@ import './App.css';
 import useFetch from 'use-http'
 import {Avatar, Box, Grid, List, ListItem, Paper, TextField, Typography} from "@material-ui/core";
 import * as React from "react";
-import {useEffect, useMemo, useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 
 
 export default function App() {
@@ -35,9 +35,9 @@ export default function App() {
     const forks = useMemo(() => {
         return repos && repos.reduce((total: number, repo: { forks: number }) => total + repo.forks, 0)
     }, [repos])
-    let onChangeTextField = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    const onChangeTextField = useCallback((e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         setUsername(e.target.value)
-    };
+    },[]);
     return (
         <Box display={'flex'} height={'100vh'} alignItems={'center'} justifyContent={'center'}>
             <Paper elevation={6}>
